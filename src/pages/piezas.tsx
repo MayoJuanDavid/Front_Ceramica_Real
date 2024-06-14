@@ -57,7 +57,9 @@ export default function Piezas() {
   return (
     <Layout>
       <div className="w-4/5 p-8">
-        <h1 className="text-2xl font-bold mb-4">Lista de Piezas</h1>
+        <h1 className="text-3xl font-bold mb-4 border border-b-zinc-300 border-t-0 border-l-0 border-r-0 pb-4">
+          Lista de Piezas
+        </h1>
         <Table
           data={COLLECCIONES_DATA}
           columns={[
