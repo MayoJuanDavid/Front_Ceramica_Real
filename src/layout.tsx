@@ -26,7 +26,7 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex items-center mb-8 lg:gap-4">
             <UserRound className={`size-8 lg:size-12`} />
             <div>
-              <h2 className="lg:text-xl font-bold text-sm line-clamp-1 hidden">
+              <h2 className="lg:text-xl font-bold text-sm hidden lg:block">
                 {user.name}
               </h2>
             </div>
