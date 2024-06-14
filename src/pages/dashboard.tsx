@@ -3,7 +3,7 @@ import Layout from "../layout";
 export default function Dashboard() {
   return (
     <Layout>
-      <div className="w-3/4 p-8 bg-white">
+      <div className="w-4/5 p-8 bg-white">
         <h1 className="text-2xl font-bold mb-4">Lista de Vajillas</h1>
         <table className="w-full mb-8">
           <thead className="bg-white">
