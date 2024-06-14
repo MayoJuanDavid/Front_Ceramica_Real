@@ -4,6 +4,9 @@ import Redirect from './pages/redirect';
 import { IRoute } from './utils/types';
 import Colecciones from './pages/colecciones';
 import Piezas from './pages/piezas';
+import { Library } from 'lucide-react';
+import { Home } from 'lucide-react';
+import { FileText } from 'lucide-react';
 
 const DEFAULT_MAIN = '/vajillas';
 
@@ -11,17 +14,17 @@ export const routes: IRoute[] = [
   {
     href: '/vajillas',
     text: 'Vajillas',
-    icon: 'https://placehold.co/20x20', // TODO: Replace for a real icon
+    icon: <Home className="size-4" />,
   },
   {
     href: '/colecciones',
     text: 'Colecciones',
-    icon: 'https://placehold.co/20x20', // TODO: Replace for a real icon
+    icon: <Library className="size-4" />,
   },
   {
     href: '/piezas',
     text: 'Piezas',
-    icon: 'https://placehold.co/20x20', // TODO: Replace for a real icon
+    icon: <FileText className="size-4" />,
   },
 ];
 
