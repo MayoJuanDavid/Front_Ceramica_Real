@@ -1,16 +1,12 @@
-interface LayoutProps{
-    children: React.ReactNode
+interface LayoutProps {
+  children: React.ReactNode;
 }
-export default function Layout(
-    {
-        children
-    }
-    :LayoutProps
-)
-
-{
-    return (
-        <main className="flex min-h-screen">      <div className="w-1/4 bg-custom-bgColor p-4 flex flex-col justify-between bg-[#f2eae1]">
+export default function Layout({ children }: LayoutProps) {
+  const location
+  return (
+    <main className="flex min-h-screen">
+      {" "}
+      <div className="w-1/4 bg-custom-bgColor p-4 flex flex-col justify-between bg-[#f2eae1]">
         <div>
           <div className="flex items-center mb-8">
             <img
@@ -68,6 +64,8 @@ export default function Layout(
             Logout
           </a>
         </div>
-      </div>{children}</main>
-    )
+      </div>
+      {children}
+    </main>
+  );
 }
