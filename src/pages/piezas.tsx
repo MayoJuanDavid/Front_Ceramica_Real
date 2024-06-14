@@ -1,89 +1,86 @@
+import { Boxes, Edit } from 'lucide-react';
 import Layout from '../layout';
+import Table from '../components/Table';
+
+const COLLECCIONES_DATA = [
+  {
+    id: 1,
+    name: (
+      <div className="flex gap-4 items-center text-zinc-800">
+        <Boxes className="size-5" />
+        <span>Amazonica Brasileira</span>
+      </div>
+    ),
+    category: 'Clasica',
+    description: 'Admin',
+    actions: (
+      <div className="flex gap-4 text-primary">
+        <Edit className="size-4" />
+      </div>
+    ),
+  },
+  {
+    id: 2,
+    name: (
+      <div className="flex gap-4 items-center text-zinc-800">
+        <Boxes className="size-5" />
+        <span>Lineal Naranja</span>
+      </div>
+    ),
+    category: 'Clasica',
+    description: 'Cliente',
+    actions: (
+      <div className="flex gap-4 text-primary">
+        <Edit className="size-4" />
+      </div>
+    ),
+  },
+  {
+    id: 3,
+    name: (
+      <div className="flex gap-4 items-center text-zinc-800">
+        <Boxes className="size-5" />
+        <span>Lineal Cereza</span>
+      </div>
+    ),
+    category: 'Clasica',
+    description: 'Admin',
+    actions: (
+      <div className="flex gap-4 text-primary">
+        <Edit className="size-4" />
+      </div>
+    ),
+  },
+];
 
 export default function Piezas() {
   return (
     <Layout>
-      {' '}
       <div className="w-4/5 p-8">
         <h1 className="text-2xl font-bold mb-4">Lista de Piezas</h1>
-        <table className="w-full mb-8">
-          <thead>
-            <tr className="text-left">
-              <th className="p-2">Nombre</th>
-              <th className="p-2">Precio</th>
-              <th className="p-2">Descripcion</th>
-              <th className="p-2">Coleccion</th>
-              <th className="p-2">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="bg-zinc-100">
-              <td className="p-2 flex items-center">
-                <img
-                  src="https://placehold.co/30x30"
-                  alt="Vaso Icon"
-                  className="mr-2"
-                />
-                Vaso
-              </td>
-              <td className="p-2">Clasica</td>
-              <td className="p-2">Vaso mediano</td>
-              <td className="p-2">Lineal Naranja</td>
-              <td className="p-2 flex items-center">
-                <img
-                  src="https://placehold.co/20x20"
-                  alt="Edit Icon"
-                  className="mr-2"
-                />
-                <img src="https://placehold.co/20x20" alt="Delete Icon" />
-              </td>
-            </tr>
-            <tr className="bg-zinc-100">
-              <td className="p-2 flex items-center">
-                <img
-                  src="https://placehold.co/30x30"
-                  alt="Taza Icon"
-                  className="mr-2"
-                />
-                Taza
-              </td>
-              <td className="p-2">Clasica</td>
-              <td className="p-2">Taza cafe pequena</td>
-              <td className="p-2">Lineal Naranja</td>
-              <td className="p-2 flex items-center">
-                <img
-                  src="https://placehold.co/20x20"
-                  alt="Edit Icon"
-                  className="mr-2"
-                />
-                <img src="https://placehold.co/20x20" alt="Delete Icon" />
-              </td>
-            </tr>
-            <tr className="bg-zinc-100">
-              <td className="p-2 flex items-center">
-                <img
-                  src="https://placehold.co/30x30"
-                  alt="Plato Icon"
-                  className="mr-2"
-                />
-                Plato
-              </td>
-              <td className="p-2">Clasica</td>
-              <td className="p-2">Plato taza cafe</td>
-              <td className="p-2">Lineal Naranja</td>
-              <td className="p-2 flex items-center">
-                <img
-                  src="https://placehold.co/20x20"
-                  alt="Edit Icon"
-                  className="mr-2"
-                />
-                <img src="https://placehold.co/20x20" alt="Delete Icon" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <Table
+          data={COLLECCIONES_DATA}
+          columns={[
+            {
+              text: 'Nombre',
+              accessor: 'name',
+            },
+            {
+              text: 'Categoria',
+              accessor: 'category',
+            },
+            {
+              text: 'Descripcion',
+              accessor: 'description',
+            },
+            {
+              text: 'Acciones',
+              accessor: 'actions',
+            },
+          ]}
+        />
         <h1 className="text-2xl font-bold mb-4">Agregar Pieza</h1>
-        <div className="bg-zinc-100 p-4 flex items-center">
+        {/* <div className="bg-zinc-100 p-4 flex items-center">
           <img
             src="https://placehold.co/30x30"
             alt="Agregar Icon"
@@ -112,7 +109,7 @@ export default function Piezas() {
           <button className="bg-yellow-500 text-white p-2 rounded">
             AGREGAR PIEZA
           </button>
-        </div>
+        </div> */}
       </div>
     </Layout>
   );

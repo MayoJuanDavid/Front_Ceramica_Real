@@ -9,7 +9,7 @@ interface TableProps {
 
 export default function Table({ data, columns }: TableProps) {
   return (
-    <table className="table-auto w-full shadow-md -mt-2 rounded bg-black border-separate border-spacing-y-3 bg-transparent">
+    <table className="table-auto w-full -mt-2 rounded bg-black border-separate border-spacing-y-3 bg-transparent">
       <thead>
         <tr>
           {columns.map((column) => (
@@ -24,10 +24,10 @@ export default function Table({ data, columns }: TableProps) {
       </thead>
       <tbody>
         {data.map((row) => (
-          <tr className="bg-[#E5E5E5] custom_td" key={row.id}>
+          <tr className="bg-[#E5E5E5]" key={row.id}>
             {columns.map((column) => (
               <td className="p-4" key={column.accessor}>
-                {row[column.accessor]}
+                <span className="text-xs lg:text-base">{row[column.accessor]}</span>
               </td>
             ))}
           </tr>

@@ -7,7 +7,7 @@ const VAJILLAS_DATA = [
   {
     id: 1,
     name: (
-      <div className="flex gap-2">
+      <div className="flex gap-2 items-center">
         <Vajilla className="size-10" />
         <span>Vaso</span>
       </div>
@@ -17,7 +17,7 @@ const VAJILLAS_DATA = [
     collection: 'Lineal Naranja',
     quantity: 10,
     actions: (
-      <div className="flex gap-4 text-yellow-500">
+      <div className="flex gap-4 text-primary">
         <Edit className="size-4" />
       </div>
     ),
@@ -25,7 +25,7 @@ const VAJILLAS_DATA = [
   {
     id: 2,
     name: (
-      <div className="flex gap-2">
+      <div className="flex gap-2 items-center">
         <Vajilla className="size-10" />
         <span>Taza</span>
       </div>
@@ -35,7 +35,7 @@ const VAJILLAS_DATA = [
     collection: 'Lineal Naranja',
     quantity: 10,
     actions: (
-      <div className="flex gap-4 text-yellow-500">
+      <div className="flex gap-4 text-primary">
         <Edit className="size-4" />
       </div>
     ),
@@ -43,7 +43,7 @@ const VAJILLAS_DATA = [
   {
     id: 3,
     name: (
-      <div className="flex gap-2">
+      <div className="flex gap-2 items-center">
         <Vajilla className="size-10" />
         <span>Plato</span>
       </div>
@@ -53,7 +53,7 @@ const VAJILLAS_DATA = [
     collection: 'Lineal Naranja',
     quantity: 10,
     actions: (
-      <div className="flex gap-4 text-yellow-500">
+      <div className="flex gap-4 text-primary">
         <Edit className="size-4" />
       </div>
     ),
@@ -119,7 +119,7 @@ export default function Dashboard() {
                 />
               </td>
               <td className="p-2">
-                <button className="bg-yellow-500 text-white rounded p-2 text-sm">
+                <button className="bg-primary text-white rounded p-2 text-sm">
                   Seleccionar Pieza
                 </button>
               </td>
@@ -131,7 +131,7 @@ export default function Dashboard() {
                 />
               </td>
               <td className="p-2">
-                <button className="bg-yellow-500 text-white rounded p-2 text-sm">
+                <button className="bg-primary text-white rounded p-2 text-sm">
                   Agregar Vajilla
                 </button>
               </td>
