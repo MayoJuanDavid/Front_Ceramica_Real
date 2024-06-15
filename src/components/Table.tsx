@@ -26,8 +26,8 @@ export default function Table({ data, columns }: TableProps) {
         {data.map((row) => (
           <tr className="bg-[#E5E5E5]" key={row.id}>
             {columns.map((column) => (
-              <td className="p-4" key={column.accessor}>
-                <span className="text-xs lg:text-base">{row[column.accessor]}</span>
+              <td className="p-1" key={column.accessor}>
+                <span className="text-xs lg:text-sm">{row[column.accessor]}</span>
               </td>
             ))}
           </tr>
