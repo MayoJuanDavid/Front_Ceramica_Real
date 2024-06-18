@@ -5,7 +5,7 @@ import AddVajillaModal from '../components/modals/add-vajilla-modal';
 import useAddVajillaModal from '../hooks/use-add-vajilla-modal';
 import Layout from '../layout';
 import { Edit } from 'lucide-react';
-import { useVajilla } from '../contexts/vajillaContext';
+import { useData } from '../contexts/dataContext';
 
 type FormData = {
   id: number;
@@ -14,66 +14,9 @@ type FormData = {
   descripcion: string;
 };
 
-// const VAJILLAS_DATA = [
-//   {
-//     id: 1,
-//     name: (
-//       <div className="flex gap-2 items-center">
-//         <Vajilla className="size-8" />
-//         <span>Vaso</span>
-//       </div>
-//     ),
-//     price: 'Clasica',
-//     description: 'Vaso mediano',
-//     collection: 'Lineal Naranja',
-//     quantity: 10,
-//     actions: (
-//       <div className="flex gap-4 text-primary">
-//         <Edit className="size-4" />
-//       </div>
-//     ),
-//   },
-//   {
-//     id: 2,
-//     name: (
-//       <div className="flex gap-2 items-center">
-//         <Vajilla className="size-8" />
-//         <span>Taza</span>
-//       </div>
-//     ),
-//     price: 'Clasica',
-//     description: 'Taza cafe pequena',
-//     collection: 'Lineal Naranja',
-//     quantity: 10,
-//     actions: (
-//       <div className="flex gap-4 text-primary">
-//         <Edit className="size-4" />
-//       </div>
-//     ),
-//   },
-//   {
-//     id: 3,
-//     name: (
-//       <div className="flex gap-2 items-center">
-//         <Vajilla className="size-8" />
-//         <span>Plato</span>
-//       </div>
-//     ),
-//     price: 'Clasica',
-//     description: 'Plato taza cafe',
-//     collection: 'Lineal Naranja',
-//     quantity: 10,
-//     actions: (
-//       <div className="flex gap-4 text-primary">
-//         <Edit className="size-4" />
-//       </div>
-//     ),
-//   },
-// ];
-
 export default function Dashboard() {
   const addVajillaModal = useAddVajillaModal();
-  const { vajillas, setVajillas } = useVajilla();
+  const { vajillas, setVajillas } = useData();
 
   const VAJILLAS_DATA = vajillas.map((vajilla: FormData) => ({
     id: vajilla.id,
@@ -118,7 +61,10 @@ export default function Dashboard() {
             ]}
           />
         ) : (
-          <div>No hay vajillas</div>
+          <div className="flex flex-col items-center justify-center gap-4">
+            <Vajilla className="size-12 text-zinc-500" />
+            <span className="text-xl text-zinc-500">No hay Vajillas</span>
+          </div>
         )}
       </div>
     </Layout>

@@ -1,11 +1,11 @@
 import { RouterProvider } from 'react-router-dom';
 import { BrowserRouter } from './routes';
-import { VajillaProvider } from './contexts/vajillaContext';
+import { DataProvider } from './contexts/dataContext';
 
 export default function Home() {
   return (
-    <VajillaProvider>
+    <DataProvider>
       <RouterProvider router={BrowserRouter} />
-    </VajillaProvider>
+    </DataProvider>
   );
 }
