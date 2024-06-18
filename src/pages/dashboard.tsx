@@ -7,9 +7,9 @@ import { Edit } from 'lucide-react';
 import { useData } from '../contexts/dataContext';
 
 type FormData = {
-  id: number;
+  nro_v: number;
   nombre: string;
-  cantidad: number;
+  cant_p: number;
   descripcion: string;
 };
 
@@ -18,7 +18,7 @@ export default function Dashboard() {
   const { vajillas, setVajillas } = useData();
 
   const VAJILLAS_DATA = vajillas.map((vajilla: FormData) => ({
-    id: vajilla.id,
+    nro_v: vajilla.nro_v,
     nombre: (
       <div className="flex gap-2 items-center">
         <Vajilla className="size-8" />
@@ -26,10 +26,10 @@ export default function Dashboard() {
       </div>
     ),
     descripcion: vajilla.descripcion,
-    cantidad: vajilla.cantidad,
+    cant_p: vajilla.cant_p,
     acciones: (
       <div className="flex gap-4 text-primary">
-        <Edit className="size-4" id={vajilla.id.toString()} />
+        <Edit className="size-4" id={vajilla.nro_v.toString()} />
       </div>
     ),
   }));
@@ -52,9 +52,9 @@ export default function Dashboard() {
           <Table
             data={VAJILLAS_DATA}
             columns={[
-              { text: 'Id', accessor: 'id' },
+              { text: 'Id', accessor: 'nro_v' },
               { text: 'Nombre', accessor: 'nombre' },
-              { text: 'Cantidad', accessor: 'cantidad' },
+              { text: 'Cantidad', accessor: 'cant_p' },
               { text: 'Descripcion', accessor: 'descripcion' },
               { text: 'Acciones', accessor: 'acciones' },
             ]}

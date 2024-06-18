@@ -4,9 +4,9 @@ import React from 'react';
 export const baseURL = 'http://localhost:8000';
 
 type Vajilla = {
-  id: number;
+  nro_v: number;
   nombre: string;
-  cantidad: number;
+  cant_p: number;
   descripcion: string;
 };
 
@@ -64,8 +64,22 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  // vajillas
+
+  const fetchVajillas = async () => {
+    try {
+      const response = await axios.get(`${baseURL}/vajillas`);
+      const { data } = response;
+
+      setVajillas(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   React.useEffect(() => {
     fetchColecciones();
+    fetchVajillas();
   }, []);
 
   return (
