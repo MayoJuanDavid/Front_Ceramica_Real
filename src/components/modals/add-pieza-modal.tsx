@@ -18,10 +18,18 @@ type FormData = {
 };
 
 interface AddPiezaModalProps {
+  pieza?: FormData;
   setPiezas: React.Dispatch<React.SetStateAction<FormData[]>>;
+  setPieza: React.Dispatch<React.SetStateAction<FormData | undefined>>;
+  isUpdate?: boolean;
 }
 
-const AddPiezaModal = ({ setPiezas }: AddPiezaModalProps) => {
+const AddPiezaModal = ({
+  pieza,
+  setPiezas,
+  setPieza,
+  isUpdate,
+}: AddPiezaModalProps) => {
   const [isLoading, setIsloading] = React.useState(false);
 
   const { moldes, colecciones } = useData();
@@ -33,8 +41,33 @@ const AddPiezaModal = ({ setPiezas }: AddPiezaModalProps) => {
     formState: { errors },
   } = useForm<FormData>();
 
+  React.useEffect(() => {
+    if (pieza) {
+      reset(pieza);
+    }
+  }, [reset, pieza]);
+
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
+      if (isUpdate) {
+        const response = await axios.put(
+          `${baseURL}/piezas/update/${pieza?.nro_p}`,
+          data
+        );
+
+        if (response.status !== 200) {
+          throw new Error('Error al actualizar la pieza');
+        }
+
+        setPiezas((prev) =>
+          prev.map((p) => (p.nro_p === pieza?.nro_p ? response.data : p))
+        );
+
+        toast.success('Pieza actualizada');
+        setPieza(undefined);
+        return;
+      }
+
       const response = await axios.post(`${baseURL}/piezas/add`, {
         ...data,
         id_coleccion: Number(data.id_coleccion),
@@ -53,6 +86,7 @@ const AddPiezaModal = ({ setPiezas }: AddPiezaModalProps) => {
     } finally {
       setIsloading(false);
       reset();
+      piezaModal.onClose();
     }
   };
 
@@ -121,8 +155,8 @@ const AddPiezaModal = ({ setPiezas }: AddPiezaModalProps) => {
     <Modal
       disabled={isLoading}
       isOpen={piezaModal.isOpen}
-      title="Agregar Pieza"
-      actionLabel="Agregar"
+      title={`${isUpdate ? 'Modificar' : 'Agregar'}Pieza`}
+      actionLabel={`${isUpdate ? 'Modificar' : 'Agregar'}`}
       onClose={piezaModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
