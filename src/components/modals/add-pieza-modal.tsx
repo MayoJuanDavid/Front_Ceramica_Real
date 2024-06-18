@@ -3,24 +3,36 @@ import Modal from './modal';
 import Input from '../input';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import useAddPiezaModal from '../../hooks/use-add-pieza-modal';
+import { baseURL, useData } from '../../contexts/dataContext';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 type FormData = {
-  coleccion: number;
-  id: number;
-  molde: number;
+  id_coleccion: number;
+  coleccion: string;
+  nro_p: number;
+  id_molde: number;
+  molde: string;
   descripcion: string;
   precio: number;
 };
 
 interface AddPiezaModalProps {
+  pieza?: FormData;
   setPiezas: React.Dispatch<React.SetStateAction<FormData[]>>;
+  setPieza: React.Dispatch<React.SetStateAction<FormData | undefined>>;
+  isUpdate?: boolean;
 }
 
-const AddPiezaModal = ({ setPiezas }: AddPiezaModalProps) => {
+const AddPiezaModal = ({
+  pieza,
+  setPiezas,
+  setPieza,
+  isUpdate,
+}: AddPiezaModalProps) => {
   const [isLoading, setIsloading] = React.useState(false);
-  const generateID = () => {
-    return Math.floor(Math.random() * 1000);
-  };
+
+  const { moldes, colecciones } = useData();
 
   const {
     register,
@@ -29,23 +41,53 @@ const AddPiezaModal = ({ setPiezas }: AddPiezaModalProps) => {
     formState: { errors },
   } = useForm<FormData>();
 
+  React.useEffect(() => {
+    if (pieza) {
+      reset(pieza);
+    }
+  }, [reset, pieza]);
+
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-     // TODO: Agregar conexion con la API se llama aqui
-    /**
-     * * try {
-     * * fetch('url', {...data}) something like this
-     * * setColecciones((prev) => [...prev, { ...data, id: generateID() }]);
-     * *} catch (error) {
-     * * console.error(error)
-     * *}
-     */
-    setIsloading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log(data);
-    setPiezas((prev) => [...prev, { ...data, id: generateID() }]);
-    setIsloading(false);
-    reset();
-    piezaModal.onClose();
+    try {
+      if (isUpdate) {
+        const response = await axios.put(
+          `${baseURL}/piezas/update/${pieza?.nro_p}`,
+          data
+        );
+
+        if (response.status !== 200) {
+          throw new Error('Error al actualizar la pieza');
+        }
+
+        setPiezas((prev) =>
+          prev.map((p) => (p.nro_p === pieza?.nro_p ? response.data : p))
+        );
+
+        toast.success('Pieza actualizada');
+        setPieza(undefined);
+        return;
+      }
+
+      const response = await axios.post(`${baseURL}/piezas/add`, {
+        ...data,
+        id_coleccion: Number(data.id_coleccion),
+        id_molde: Number(data.id_molde),
+      });
+
+      if (response.status !== 200) {
+        throw new Error('Error al agregar la pieza');
+      }
+
+      setPiezas((prev) => [...prev, response.data]);
+
+      toast.success('Pieza agregada');
+    } catch (error) {
+      toast.error('Error al agregar la pieza');
+    } finally {
+      setIsloading(false);
+      reset();
+      piezaModal.onClose();
+    }
   };
 
   const piezaModal = useAddPiezaModal();
@@ -53,23 +95,35 @@ const AddPiezaModal = ({ setPiezas }: AddPiezaModalProps) => {
   const bodyContent = (
     <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
       <div className="w-full flex flex-col px-32">
-        <Input
-          label="Colección"
-          {...register('coleccion', { required: true })}
-          type="number"
-        />
-        {errors.coleccion ? (
+        <label>Colección</label>
+        <select
+          {...register('id_coleccion', { required: true })}
+          className="border border-zinc-300 rounded-lg p-2"
+        >
+          <option value="">Selecciona una colección</option>
+          {colecciones.map((coleccion) => (
+            <option key={coleccion.id_coleccion} value={coleccion.id_coleccion}>
+              {coleccion.nombre}
+            </option>
+          ))}
+        </select>
+        {errors.id_coleccion ? (
           <span className="text-xs text-rose-600">Este campo es requerido</span>
         ) : null}
       </div>
       <div className="w-full flex flex-col px-32">
-        <Input
-          label="Molde"
-          {...register('molde', { required: true })}
-          type="number"
-          min={1}
-        />
-        {errors.molde ? (
+        <select
+          {...register('id_molde', { required: true })}
+          className="border border-zinc-300 rounded-lg p-2"
+        >
+          <option value="">Selecciona un molde</option>
+          {moldes.map((molde) => (
+            <option key={molde.id_molde} value={molde.id_molde}>
+              {`${molde.tipo} ${molde.volumen ?? ''}`}
+            </option>
+          ))}
+        </select>
+        {errors.id_molde ? (
           <span className="text-xs text-rose-600">Este campo es requerido</span>
         ) : null}
       </div>
@@ -83,7 +137,11 @@ const AddPiezaModal = ({ setPiezas }: AddPiezaModalProps) => {
         ) : null}
       </div>
       <div className="w-full flex flex-col px-32">
-        <Input label="Categoria" {...register('precio', { required: true })} />
+        <Input
+          label="Precio"
+          {...register('precio', { required: true })}
+          type="number"
+        />
         {errors.precio ? (
           <span className="text-xs text-rose-600">Este campo es requerido</span>
         ) : null}
@@ -97,8 +155,8 @@ const AddPiezaModal = ({ setPiezas }: AddPiezaModalProps) => {
     <Modal
       disabled={isLoading}
       isOpen={piezaModal.isOpen}
-      title="Agregar Pieza"
-      actionLabel="Agregar"
+      title={`${isUpdate ? 'Modificar' : 'Agregar'}Pieza`}
+      actionLabel={`${isUpdate ? 'Modificar' : 'Agregar'}`}
       onClose={piezaModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}

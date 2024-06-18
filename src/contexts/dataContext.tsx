@@ -1,25 +1,41 @@
+import axios from 'axios';
 import React from 'react';
 
+export const baseURL = 'http://localhost:8000';
+
 type Vajilla = {
-  id: number;
+  nro_v: number;
   nombre: string;
-  cantidad: number;
+  cant_p: number;
   descripcion: string;
 };
 
 interface Coleccion {
-  id: number;
+  id_coleccion: number;
   nombre: string;
-  categoria: number;
-  descripcion: string;
+  categoria: string;
+  desc_mot_col: string;
 }
 
 interface Pieza {
-  coleccion: number;
-  id: number;
-  molde: number;
+  id_coleccion: number;
+  coleccion: string;
+  nro_p: number;
+  id_molde: number;
+  molde: string;
   descripcion: string;
   precio: number;
+}
+
+interface Molde {
+  id_molde: number;
+  tipo: string;
+  forma?: string;
+  t_plato?: string;
+  t_taza?: string;
+  tamano?: string;
+  volumen: string;
+  cant_p?: number;
 }
 
 interface DataContextProps {
@@ -29,6 +45,7 @@ interface DataContextProps {
   setColecciones: React.Dispatch<React.SetStateAction<Coleccion[]>>;
   piezas: Pieza[];
   setPiezas: React.Dispatch<React.SetStateAction<Pieza[]>>;
+  moldes: Molde[];
 }
 
 export const DataContext = React.createContext<DataContextProps | undefined>(
@@ -47,14 +64,64 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const [vajillas, setVajillas] = React.useState<Vajilla[]>([]);
   const [colecciones, setColecciones] = React.useState<Coleccion[]>([]);
   const [piezas, setPiezas] = React.useState<Pieza[]>([]);
+  const [moldes, setMoldes] = React.useState<Molde[]>([]);
 
-  /**
-   * * React.useEffect(()=> {
-   * *  -> una por cada uno
-   * *  fetch('url')
-   * *  .then((res) => setVajilla(res.json()))
-   * *},[vajillas, colecciones, piezas])
-   */
+  // Fetch colecciones
+
+  const fetchColecciones = async () => {
+    try {
+      const response = await axios.get(`${baseURL}/colecciones`);
+      const { data } = response;
+
+      setColecciones(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // vajillas
+
+  const fetchVajillas = async () => {
+    try {
+      const response = await axios.get(`${baseURL}/vajillas`);
+      const { data } = response;
+
+      setVajillas(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // fetch piezas
+
+  const fetchPiezas = async () => {
+    try {
+      const response = await axios.get(`${baseURL}/piezas`);
+      const { data } = response;
+      setPiezas(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // fetch moldes
+
+  const fetchMoldes = async () => {
+    try {
+      const response = await axios.get(`${baseURL}/moldes`);
+      const { data } = response;
+      setMoldes(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchColecciones();
+    fetchVajillas();
+    fetchPiezas();
+    fetchMoldes();
+  }, []);
 
   return (
     <DataContext.Provider
@@ -65,6 +132,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
         setColecciones,
         piezas,
         setPiezas,
+        moldes,
       }}
     >
       {children}

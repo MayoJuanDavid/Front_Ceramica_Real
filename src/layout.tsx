@@ -11,7 +11,7 @@ interface LayoutProps {
 
 // #region Mock user data
 const user = {
-  name: 'Juan David Mayo Martins',
+  name: 'Usuario',
 };
 // #endregion
 
