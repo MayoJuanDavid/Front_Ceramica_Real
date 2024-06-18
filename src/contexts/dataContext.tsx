@@ -17,7 +17,7 @@ interface Coleccion {
 interface Pieza {
   coleccion: number;
   id: number;
-  molde: string;
+  molde: number;
   descripcion: string;
   precio: number;
 }

@@ -1,4 +1,3 @@
-import React from 'react';
 import Table from '../components/Table';
 import Vajilla from '../components/icons/vajilla';
 import AddVajillaModal from '../components/modals/add-vajilla-modal';

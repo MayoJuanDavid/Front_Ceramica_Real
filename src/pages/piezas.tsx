@@ -1,117 +1,78 @@
 import { Boxes, Edit } from 'lucide-react';
 import Layout from '../layout';
 import Table from '../components/Table';
-
-const COLLECCIONES_DATA = [
-  {
-    id: 1,
-    name: (
-      <div className="flex gap-4 items-center text-zinc-800">
-        <Boxes className="size-5" />
-        <span>Amazonica Brasileira</span>
-      </div>
-    ),
-    category: 'Clasica',
-    description: 'Admin',
-    actions: (
-      <div className="flex gap-4 text-primary">
-        <Edit className="size-4" />
-      </div>
-    ),
-  },
-  {
-    id: 2,
-    name: (
-      <div className="flex gap-4 items-center text-zinc-800">
-        <Boxes className="size-5" />
-        <span>Lineal Naranja</span>
-      </div>
-    ),
-    category: 'Clasica',
-    description: 'Cliente',
-    actions: (
-      <div className="flex gap-4 text-primary">
-        <Edit className="size-4" />
-      </div>
-    ),
-  },
-  {
-    id: 3,
-    name: (
-      <div className="flex gap-4 items-center text-zinc-800">
-        <Boxes className="size-5" />
-        <span>Lineal Cereza</span>
-      </div>
-    ),
-    category: 'Clasica',
-    description: 'Admin',
-    actions: (
-      <div className="flex gap-4 text-primary">
-        <Edit className="size-4" />
-      </div>
-    ),
-  },
-];
+import AddPiezaModal from '../components/modals/add-pieza-modal';
+import { useData } from '../contexts/dataContext';
+import useAddPiezaModal from '../hooks/use-add-pieza-modal';
 
 export default function Piezas() {
+  const { piezas, setPiezas } = useData();
+
+  const addPiezaModal = useAddPiezaModal();
+
+  const PIEZAS_DATA = piezas.map((pieza) => ({
+    id: pieza.id,
+    coleccion: (
+      <div className="flex gap-4 items-center text-zinc-800">
+        <Boxes className="size-5" />
+        <span>{pieza.coleccion}</span>
+      </div>
+    ),
+    descripcion: pieza.descripcion,
+    molde: pieza.molde,
+    acciones: (
+      <div className="flex gap-4 text-primary">
+        <Edit className="size-4" />
+      </div>
+    ),
+  }));
+
   return (
     <Layout>
-      <div className="w-4/5 p-8">
-        <h1 className="text-3xl font-bold mb-4 border border-b-zinc-300 border-t-0 border-l-0 border-r-0 pb-4">
-          Lista de Piezas
-        </h1>
-        <Table
-          data={COLLECCIONES_DATA}
-          columns={[
-            {
-              text: 'Nombre',
-              accessor: 'name',
-            },
-            {
-              text: 'Categoria',
-              accessor: 'category',
-            },
-            {
-              text: 'Descripcion',
-              accessor: 'description',
-            },
-            {
-              text: 'Acciones',
-              accessor: 'actions',
-            },
-          ]}
-        />
-        <h1 className="text-2xl font-bold mb-4">Agregar Pieza</h1>
-        {/* <div className="bg-zinc-100 p-4 flex items-center">
-          <img
-            src="https://placehold.co/30x30"
-            alt="Agregar Icon"
-            className="mr-4"
-          />
-          <input
-            type="text"
-            placeholder="Nombre"
-            className="p-2 mr-4 bg-white border rounded"
-          />
-          <input
-            type="text"
-            placeholder="Precio"
-            className="p-2 mr-4 bg-white border rounded"
-          />
-          <input
-            type="text"
-            placeholder="Descripcion"
-            className="p-2 mr-4 bg-white border rounded"
-          />
-          <input
-            type="text"
-            placeholder="Coleccion"
-            className="p-2 mr-4 bg-white border rounded"
-          />
-          <button className="bg-yellow-500 text-white p-2 rounded">
-            AGREGAR PIEZA
+      <AddPiezaModal setPiezas={setPiezas} />
+      <div className="w-4/5 p-8 bg-white flex flex-col gap-4">
+        <div className="flex justify-between items-center border border-b-zinc-300 border-t-0 border-l-0 border-r-0">
+          <h1 className="text-3xl font-bold mb-4  pb-4">Lista de Piezas</h1>
+          <button
+            className="bg-primary text-white px-2 rounded-lg text-xs h-7 mt-2"
+            type="button"
+            onClick={addPiezaModal.onOpen}
+          >
+            + Agregar
           </button>
-        </div> */}
+        </div>
+        {PIEZAS_DATA?.length > 0 ? (
+          <Table
+            data={PIEZAS_DATA}
+            columns={[
+              {
+                text: 'Id',
+                accessor: 'id',
+              },
+              {
+                text: 'Colección',
+                accessor: 'coleccion',
+              },
+              {
+                text: 'Descripcion',
+                accessor: 'descripcion',
+              },
+              {
+                text: 'molde',
+                accessor: 'molde',
+              },
+              {
+                text: 'Acciones',
+                accessor: 'acciones',
+              },
+            ]}
+          />
+        ) : (
+          <div className="flex flex-col items-center justify-center gap-4">
+            <Boxes className="size-12 text-zinc-500" />
+            <span className="text-xl text-zinc-500">No hay Piezas</span>
+          </div>
+        )}
       </div>
     </Layout>
   );
