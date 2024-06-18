@@ -1,22 +1,21 @@
 import React from 'react';
 import Modal from './modal';
-import useAddVajillaModal from '../../hooks/use-add-vajilla-modal';
+import useAddColeccionModal from '../../hooks/use-add-coleccion-modal';
 import Input from '../input';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 type FormData = {
   id: number;
   nombre: string;
-  cantidad: number;
+  categoria: number;
   descripcion: string;
 };
 
-interface AddVajillaModalProps {
-  // vajillas: FormData[];
-  setVajillas: React.Dispatch<React.SetStateAction<FormData[]>>;
+interface AddColeccionModalProps {
+  setColecciones: React.Dispatch<React.SetStateAction<FormData[]>>;
 }
 
-const AddVajillaModal = ({ setVajillas }: AddVajillaModalProps) => {
+const AddColeccionModal = ({ setColecciones }: AddColeccionModalProps) => {
   const [isLoading, setIsloading] = React.useState(false);
   const generateID = () => {
     return Math.floor(Math.random() * 1000);
@@ -33,13 +32,13 @@ const AddVajillaModal = ({ setVajillas }: AddVajillaModalProps) => {
     setIsloading(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     console.log(data);
-    setVajillas((prev) => [...prev, { ...data, id: generateID() }]);
+    setColecciones((prev) => [...prev, { ...data, id: generateID() }]);
     setIsloading(false);
     reset();
-    vajillaModal.onClose();
+    coleccionModal.onClose();
   };
 
-  const vajillaModal = useAddVajillaModal();
+  const coleccionModal = useAddColeccionModal();
 
   const bodyContent = (
     <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
@@ -52,11 +51,11 @@ const AddVajillaModal = ({ setVajillas }: AddVajillaModalProps) => {
       <div className="w-full flex flex-col px-32">
         <Input
           label="Cantidad"
-          {...register('cantidad', { required: true })}
+          {...register('categoria', { required: true })}
           type="number"
           min={1}
         />
-        {errors.cantidad ? (
+        {errors.categoria ? (
           <span className="text-xs text-rose-600">Este campo es requerido</span>
         ) : null}
       </div>
@@ -69,6 +68,15 @@ const AddVajillaModal = ({ setVajillas }: AddVajillaModalProps) => {
           <span className="text-xs text-rose-600">Este campo es requerido</span>
         ) : null}
       </div>
+      <div className="w-full flex flex-col px-32">
+        <Input
+          label="Categoria"
+          {...register('categoria', { required: true })}
+        />
+        {errors.categoria ? (
+          <span className="text-xs text-rose-600">Este campo es requerido</span>
+        ) : null}
+      </div>
     </form>
   );
 
@@ -77,10 +85,10 @@ const AddVajillaModal = ({ setVajillas }: AddVajillaModalProps) => {
   return (
     <Modal
       disabled={isLoading}
-      isOpen={vajillaModal.isOpen}
-      title="Agregar Vajilla"
+      isOpen={coleccionModal.isOpen}
+      title="Agregar coleccion"
       actionLabel="Agregar"
-      onClose={vajillaModal.onClose}
+      onClose={coleccionModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
       footer={footerContent}
@@ -88,4 +96,4 @@ const AddVajillaModal = ({ setVajillas }: AddVajillaModalProps) => {
   );
 };
 
-export default AddVajillaModal;
+export default AddColeccionModal;
