@@ -48,6 +48,14 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const [colecciones, setColecciones] = React.useState<Coleccion[]>([]);
   const [piezas, setPiezas] = React.useState<Pieza[]>([]);
 
+  /**
+   * * React.useEffect(()=> {
+   * *  -> una por cada uno
+   * *  fetch('url')
+   * *  .then((res) => setVajilla(res.json()))
+   * *},[vajillas, colecciones, piezas])
+   */
+
   return (
     <DataContext.Provider
       value={{
