@@ -15,11 +15,18 @@ type FormData = {
 };
 
 interface AddVajillaModalProps {
-  // vajillas: FormData[];
+  vajilla?: FormData;
+  setVajilla: React.Dispatch<React.SetStateAction<FormData | undefined>>;
   setVajillas: React.Dispatch<React.SetStateAction<FormData[]>>;
+  isUpdate?: boolean;
 }
 
-const AddVajillaModal = ({ setVajillas }: AddVajillaModalProps) => {
+const AddVajillaModal = ({
+  vajilla,
+  setVajilla,
+  setVajillas,
+  isUpdate = false,
+}: AddVajillaModalProps) => {
   const [isLoading, setIsloading] = React.useState(false);
 
   const {
@@ -28,6 +35,12 @@ const AddVajillaModal = ({ setVajillas }: AddVajillaModalProps) => {
     reset,
     formState: { errors },
   } = useForm<FormData>();
+
+  React.useEffect(() => {
+    if (vajilla) {
+      reset(vajilla);
+    }
+  }, [vajilla, reset]);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     if (
@@ -41,6 +54,24 @@ const AddVajillaModal = ({ setVajillas }: AddVajillaModalProps) => {
 
     setIsloading(true);
     try {
+      if (isUpdate) {
+        const response = await axios.put(
+          `${baseURL}/vajillas/update/${vajilla?.nro_v}`,
+          data
+        );
+
+        if (response.status !== 200) {
+          throw new Error('Error al actualizar la coleccion');
+        }
+
+        vajillaModal.onClose();
+        setVajillas((prev) =>
+          prev.map((v) => (v.nro_v === vajilla?.nro_v ? response.data : v))
+        );
+        toast.success('Vajilla actualizada');
+        setVajilla(undefined);
+        return;
+      }
       const response = await axios.post(`${baseURL}/vajillas/add`, data);
 
       if (response.status !== 200) {
@@ -97,8 +128,8 @@ const AddVajillaModal = ({ setVajillas }: AddVajillaModalProps) => {
     <Modal
       disabled={isLoading}
       isOpen={vajillaModal.isOpen}
-      title="Agregar Vajilla"
-      actionLabel="Agregar"
+      title={`${isUpdate ? 'Modificar' : 'Agregar'} Vajilla`}
+      actionLabel={isUpdate ? 'Modificar' : 'Agregar'}
       onClose={vajillaModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}

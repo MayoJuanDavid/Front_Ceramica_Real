@@ -55,7 +55,18 @@ export default (router: express.Router): void => {
           console.log(error);
           res.status(500).send('Internal server error');
         } else {
-          res.send('Vajilla actualizada');
+          pool.query(
+            'SELECT * FROM vajilla WHERE nro_v = $1',
+            [nro_v],
+            (error, result) => {
+              if (error) {
+                console.log(error);
+                res.status(500).send('Internal server error');
+              } else {
+                res.send(result.rows[0]);
+              }
+            }
+          );
         }
       }
     );
