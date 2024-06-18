@@ -30,6 +30,15 @@ const AddVajillaModal = ({ setVajillas }: AddVajillaModalProps) => {
   } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
+    // TODO: Agregar conexion con la API se llama aqui
+    /**
+     * * try {
+     * * fetch('url', {...data}) something like this
+     * * setColecciones((prev) => [...prev, { ...data, id: generateID() }]);
+     * *} catch (error) {
+     * * console.error(error)
+     * *}
+     */
     setIsloading(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     console.log(data);
