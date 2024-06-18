@@ -13,7 +13,7 @@ type Vajilla = {
 interface Coleccion {
   id_coleccion: number;
   nombre: string;
-  categoria: number;
+  categoria: string;
   desc_mot_col: string;
 }
 

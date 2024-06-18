@@ -10,15 +10,23 @@ import axios from 'axios';
 type FormData = {
   id_coleccion: number;
   nombre: string;
-  categoria: number;
+  categoria: string;
   desc_mot_col: string;
 };
 
 interface AddColeccionModalProps {
+  coleccion?: FormData;
   setColecciones: React.Dispatch<React.SetStateAction<FormData[]>>;
+  setColeccion: React.Dispatch<React.SetStateAction<FormData | undefined>>;
+  isUpdate?: boolean;
 }
 
-const AddColeccionModal = ({ setColecciones }: AddColeccionModalProps) => {
+const AddColeccionModal = ({
+  coleccion,
+  setColecciones,
+  setColeccion,
+  isUpdate = false,
+}: AddColeccionModalProps) => {
   const [isLoading, setIsloading] = React.useState(false);
 
   const {
@@ -28,9 +36,37 @@ const AddColeccionModal = ({ setColecciones }: AddColeccionModalProps) => {
     formState: { errors },
   } = useForm<FormData>();
 
+  React.useEffect(() => {
+    if (coleccion) {
+      reset(coleccion);
+    }
+  }, [reset, coleccion]);
+
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     setIsloading(true);
     try {
+      if (isUpdate) {
+        const response = await axios.put(
+          `${baseURL}/colecciones/update/${coleccion?.id_coleccion}`,
+          data
+        );
+
+        if (response.status !== 200) {
+          throw new Error('Error al actualizar la coleccion');
+        }
+
+        setColecciones((prev) =>
+          prev.map((c) =>
+            c.id_coleccion === coleccion?.id_coleccion ? response.data : c
+          )
+        );
+
+        toast.success('Colección actualizada');
+        setColeccion(undefined);
+        coleccionModal.onClose();
+        return;
+      }
+
       const response = await axios.post(`${baseURL}/colecciones/add`, data);
 
       if (response.status !== 200) {
@@ -55,17 +91,6 @@ const AddColeccionModal = ({ setColecciones }: AddColeccionModalProps) => {
       <div className="w-full flex flex-col px-32">
         <Input label="Nombre" {...register('nombre', { required: true })} />
         {errors.nombre ? (
-          <span className="text-xs text-rose-600">Este campo es requerido</span>
-        ) : null}
-      </div>
-      <div className="w-full flex flex-col px-32">
-        <Input
-          label="Cantidad"
-          {...register('categoria', { required: true })}
-          type="number"
-          min={1}
-        />
-        {errors.categoria ? (
           <span className="text-xs text-rose-600">Este campo es requerido</span>
         ) : null}
       </div>
@@ -96,8 +121,8 @@ const AddColeccionModal = ({ setColecciones }: AddColeccionModalProps) => {
     <Modal
       disabled={isLoading}
       isOpen={coleccionModal.isOpen}
-      title="Agregar coleccion"
-      actionLabel="Agregar"
+      title={`${isUpdate ? 'Modificar' : 'Agregar'} colección`}
+      actionLabel={`${isUpdate ? 'Modificar' : 'Agregar'}`}
       onClose={coleccionModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}

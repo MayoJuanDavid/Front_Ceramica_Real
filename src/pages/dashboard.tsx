@@ -35,7 +35,7 @@ export default function Dashboard() {
     acciones: (
       <div className="flex gap-4 text-primary">
         <Edit
-          className="size-4"
+          className="size-4 cursor-pointer"
           id={vajilla.nro_v.toString()}
           onClick={() => {
             setVajilla(vajilla);
@@ -43,7 +43,7 @@ export default function Dashboard() {
           }}
         />
         <Trash
-          className="size-4 text-rose-600"
+          className="size-4 text-rose-600 cursor-pointer"
           id={vajilla.nro_v.toString()}
           onClick={() => handleDeleteVajilla(vajilla.nro_v)}
         />
