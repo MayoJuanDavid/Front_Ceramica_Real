@@ -5,6 +5,7 @@ import AddVajillaModal from '../components/modals/add-vajilla-modal';
 import useAddVajillaModal from '../hooks/use-add-vajilla-modal';
 import Layout from '../layout';
 import { Edit } from 'lucide-react';
+import { useVajilla } from '../contexts/vajillaContext';
 
 type FormData = {
   id: number;
@@ -72,28 +73,24 @@ type FormData = {
 
 export default function Dashboard() {
   const addVajillaModal = useAddVajillaModal();
-  const [vajillas, setVajillas] = React.useState<FormData[]>([]);
+  const { vajillas, setVajillas } = useVajilla();
 
-  const VAJILLAS_DATA = React.useMemo(
-    () =>
-      vajillas.map((vajilla: FormData) => ({
-        id: vajilla.id,
-        nombre: (
-          <div className="flex gap-2 items-center">
-            <Vajilla className="size-8" />
-            <span>{vajilla.nombre}</span>
-          </div>
-        ),
-        descripcion: vajilla.descripcion,
-        cantidad: vajilla.cantidad,
-        acciones: (
-          <div className="flex gap-4 text-primary">
-            <Edit className="size-4" id={vajilla.id.toString()} />
-          </div>
-        ),
-      })),
-    [vajillas]
-  );
+  const VAJILLAS_DATA = vajillas.map((vajilla: FormData) => ({
+    id: vajilla.id,
+    nombre: (
+      <div className="flex gap-2 items-center">
+        <Vajilla className="size-8" />
+        <span>{vajilla.nombre}</span>
+      </div>
+    ),
+    descripcion: vajilla.descripcion,
+    cantidad: vajilla.cantidad,
+    acciones: (
+      <div className="flex gap-4 text-primary">
+        <Edit className="size-4" id={vajilla.id.toString()} />
+      </div>
+    ),
+  }));
 
   return (
     <Layout>
