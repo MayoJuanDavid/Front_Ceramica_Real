@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 
-const baseURL = 'http://localhost:8000';
+export const baseURL = 'http://localhost:8000';
 
 type Vajilla = {
   id: number;

@@ -3,6 +3,9 @@ import Modal from './modal';
 import useAddColeccionModal from '../../hooks/use-add-coleccion-modal';
 import Input from '../input';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { baseURL } from '../../contexts/dataContext';
+import axios from 'axios';
 
 type FormData = {
   id_coleccion: number;
@@ -17,9 +20,6 @@ interface AddColeccionModalProps {
 
 const AddColeccionModal = ({ setColecciones }: AddColeccionModalProps) => {
   const [isLoading, setIsloading] = React.useState(false);
-  const generateID = () => {
-    return Math.floor(Math.random() * 1000);
-  };
 
   const {
     register,
@@ -29,22 +29,23 @@ const AddColeccionModal = ({ setColecciones }: AddColeccionModalProps) => {
   } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    // TODO: Agregar conexion con la API se llama aqui
-    /**
-     * * try {
-     * * fetch('url', {...data}) something like this
-     * * setColecciones((prev) => [...prev, { ...data, id: generateID() }]);
-     * *} catch (error) {
-     * * console.error(error)
-     * *}
-     */
     setIsloading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log(data);
-    setColecciones((prev) => [...prev, { ...data, id: generateID() }]);
-    setIsloading(false);
-    reset();
-    coleccionModal.onClose();
+    try {
+      const response = await axios.post(`${baseURL}/colecciones/add`, data);
+
+      if (response.status !== 200) {
+        throw new Error('Error al agregar la coleccion');
+      }
+
+      coleccionModal.onClose();
+      setColecciones((prev) => [...prev, response.data]);
+      toast.success('Colección agregada');
+    } catch (e) {
+      toast.error('Error al agregar la coleccion');
+    } finally {
+      setIsloading(false);
+      reset();
+    }
   };
 
   const coleccionModal = useAddColeccionModal();

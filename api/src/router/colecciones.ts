@@ -17,4 +17,30 @@ export default (router: express.Router): void => {
       res.status(500).send('Internal server error');
     }
   });
+
+  router.post('/colecciones/add', (req: express.Request, res) => {
+    const { nombre, categoria, desc_mot_col } = req.body;
+    pool.query(
+      'INSERT INTO coleccion (nombre, desc_mot_col, categoria) VALUES ($1, $2, $3)',
+      [nombre, desc_mot_col, categoria],
+      (error) => {
+        if (error) {
+          console.log(error);
+          res.status(500).send('Internal server error');
+        } else {
+          pool.query(
+            'SELECT * FROM coleccion order by id_coleccion desc limit 1',
+            (error, result) => {
+              if (error) {
+                console.log(error);
+                res.status(500).send('Internal server error');
+              } else {
+                res.send(result.rows[0]);
+              }
+            }
+          );
+        }
+      }
+    );
+  });
 };
