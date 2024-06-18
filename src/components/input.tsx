@@ -1,25 +1,26 @@
-import React from "react";
+import React from 'react';
 
 interface InputProps
   extends React.DetailedHTMLProps<
     React.InputHTMLAttributes<HTMLInputElement>,
     HTMLInputElement
   > {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  label:string
+  label: string;
 }
-export default function Input({value,onChange,label,className}:InputProps) {
+const Input = React.forwardRef<HTMLInputElement, InputProps>(function _Input(
+  { label, className, ...props },
+  ref
+) {
   return (
-    <label className="flex gap-6 justify-between">
-        <span>
-            {label}
-        </span>
-        <input
-        value = {value}
-        onChange={onChange}
+    <label className="flex flex-col justify-between">
+      <span>{label}</span>
+      <input
         className={`${className} bg-[#e5e5e5] text-zinc-800 focus:outline-none px-4 py-2 rounded-lg `}
-        />
+        ref={ref}
+        {...props}
+      />
     </label>
-  )
-}
+  );
+});
+
+export default Input;

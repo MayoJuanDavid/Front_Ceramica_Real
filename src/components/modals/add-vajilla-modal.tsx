@@ -1,59 +1,78 @@
-import React from "react";
-import Modal from "./modal";
-import useAddVajillaModal from "../../hooks/use-add-vajilla-modal";
-import Input from "../input";
+import React from 'react';
+import Modal from './modal';
+import useAddVajillaModal from '../../hooks/use-add-vajilla-modal';
+import Input from '../input';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
-const AddVajillaModal = () => {
+type FormData = {
+  id: number;
+  nombre: string;
+  cantidad: number;
+  descripcion: string;
+};
+
+interface AddVajillaModalProps {
+  // vajillas: FormData[];
+  setVajillas: React.Dispatch<React.SetStateAction<FormData[]>>;
+}
+
+const AddVajillaModal = ({ setVajillas }: AddVajillaModalProps) => {
   const [isLoading, setIsloading] = React.useState(false);
   const generateID = () => {
-    return Math.floor(Math.random() * 1000).toString();
+    return Math.floor(Math.random() * 1000);
   };
 
-  const [form, setForm] = React.useState({
-    id: generateID(),
-    nombre: "",
-    cantidad: "",
-  });
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.name, e.target.value);
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>();
+
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    setIsloading(true);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    console.log(data);
+    setVajillas((prev) => [...prev, { ...data, id: generateID() }]);
+    setIsloading(false);
+    reset();
+    vajillaModal.onClose();
   };
+
   const vajillaModal = useAddVajillaModal();
 
   const bodyContent = (
-    <form className="flex flex-col gap-3">
+    <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
       <div className="w-full flex flex-col px-32">
-        <Input
-          label="Nombre"
-          value={form.nombre}
-          onChange={handleOnChange}
-          name="nombre"
-        />
+        <Input label="Nombre" {...register('nombre', { required: true })} />
+        {errors.nombre ? (
+          <span className="text-xs text-rose-600">Este campo es requerido</span>
+        ) : null}
       </div>
       <div className="w-full flex flex-col px-32">
         <Input
           label="Cantidad"
-          value={form.cantidad}
-          onChange={handleOnChange}
+          {...register('cantidad', { required: true })}
           type="number"
-          name="cantidad"
+          min={1}
         />
+        {errors.cantidad ? (
+          <span className="text-xs text-rose-600">Este campo es requerido</span>
+        ) : null}
+      </div>
+      <div className="w-full flex flex-col px-32">
+        <Input
+          label="Descripción"
+          {...register('descripcion', { required: true })}
+        />
+        {errors.descripcion ? (
+          <span className="text-xs text-rose-600">Este campo es requerido</span>
+        ) : null}
       </div>
     </form>
   );
 
   const footerContent = <div></div>;
-
-  const handleSubmit = () => {
-    setIsloading(true);
-    setTimeout(() => {
-      setIsloading(false);
-      vajillaModal.onClose();
-    }, 1000);
-  };
 
   return (
     <Modal
@@ -62,7 +81,7 @@ const AddVajillaModal = () => {
       title="Agregar Vajilla"
       actionLabel="Agregar"
       onClose={vajillaModal.onClose}
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
       footer={footerContent}
     />

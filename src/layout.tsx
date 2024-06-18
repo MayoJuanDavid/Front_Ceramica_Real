@@ -4,7 +4,6 @@ import { routes } from './routes';
 import { IRoute } from './utils/types';
 import { Link } from 'react-router-dom';
 import { LogOut, UserRound } from 'lucide-react';
-import AddVajillaModal from './components/modals/add-vajilla-modal';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -22,7 +21,6 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <main className="flex min-h-screen">
-      <AddVajillaModal />
       <div className="w-1/12 lg:w-1/5 p-4 flex flex-col justify-between bg-[#f2eae1]">
         <div>
           <div className="flex items-center mb-8 lg:gap-4">
