@@ -11,7 +11,7 @@ export default function Piezas() {
   const addPiezaModal = useAddPiezaModal();
 
   const PIEZAS_DATA = piezas.map((pieza) => ({
-    id: pieza.id,
+    nro_p: pieza.nro_p,
     coleccion: (
       <div className="flex gap-4 items-center text-zinc-800">
         <Boxes className="size-5" />
@@ -30,7 +30,7 @@ export default function Piezas() {
   return (
     <Layout>
       <AddPiezaModal setPiezas={setPiezas} />
-      <div className="w-4/5 p-8 bg-white flex flex-col gap-4">
+      <div className="w-4/5 p-8 bg-white flex flex-col gap-4 max-h-screen overflow-y-auto">
         <div className="flex justify-between items-center border border-b-zinc-300 border-t-0 border-l-0 border-r-0">
           <h1 className="text-3xl font-bold mb-4  pb-4">Lista de Piezas</h1>
           <button
@@ -47,7 +47,7 @@ export default function Piezas() {
             columns={[
               {
                 text: 'Id',
-                accessor: 'id',
+                accessor: 'nro_p',
               },
               {
                 text: 'Colección',
