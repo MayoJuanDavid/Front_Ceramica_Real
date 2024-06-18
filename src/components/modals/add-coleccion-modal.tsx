@@ -5,10 +5,10 @@ import Input from '../input';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 type FormData = {
-  id: number;
+  id_coleccion: number;
   nombre: string;
   categoria: number;
-  descripcion: string;
+  desc_mot_col: string;
 };
 
 interface AddColeccionModalProps {
@@ -71,9 +71,9 @@ const AddColeccionModal = ({ setColecciones }: AddColeccionModalProps) => {
       <div className="w-full flex flex-col px-32">
         <Input
           label="Descripción"
-          {...register('descripcion', { required: true })}
+          {...register('desc_mot_col', { required: true })}
         />
-        {errors.descripcion ? (
+        {errors.desc_mot_col ? (
           <span className="text-xs text-rose-600">Este campo es requerido</span>
         ) : null}
       </div>

@@ -10,8 +10,8 @@ export default function Colecciones() {
 
   const addColeccionModal = useAddColeccionModal();
 
-  const COLECCIONES_DATA = colecciones.map((coleccion) => ({
-    id: coleccion.id,
+  const COLECCIONES_DATA = colecciones?.map((coleccion) => ({
+    id: coleccion.id_coleccion,
     nombre: (
       <div className="flex gap-4 items-center text-zinc-800">
         <Boxes className="size-5" />
@@ -19,7 +19,7 @@ export default function Colecciones() {
       </div>
     ),
     categoria: coleccion.categoria,
-    descripcion: coleccion.descripcion,
+    desc_mot_col: coleccion.desc_mot_col,
     acciones: (
       <div className="flex gap-4 text-primary">
         <Edit className="size-4" />
@@ -61,7 +61,7 @@ export default function Colecciones() {
               },
               {
                 text: 'Descripcion',
-                accessor: 'descripcion',
+                accessor: 'desc_mot_col',
               },
               {
                 text: 'Acciones',

@@ -1,4 +1,7 @@
+import axios from 'axios';
 import React from 'react';
+
+const baseURL = 'http://localhost:8000';
 
 type Vajilla = {
   id: number;
@@ -8,10 +11,10 @@ type Vajilla = {
 };
 
 interface Coleccion {
-  id: number;
+  id_coleccion: number;
   nombre: string;
   categoria: number;
-  descripcion: string;
+  desc_mot_col: string;
 }
 
 interface Pieza {
@@ -48,13 +51,22 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const [colecciones, setColecciones] = React.useState<Coleccion[]>([]);
   const [piezas, setPiezas] = React.useState<Pieza[]>([]);
 
-  /**
-   * * React.useEffect(()=> {
-   * *  -> una por cada uno
-   * *  fetch('url')
-   * *  .then((res) => setVajilla(res.json()))
-   * *},[vajillas, colecciones, piezas])
-   */
+  // Fetch colecciones
+
+  const fetchColecciones = async () => {
+    try {
+      const response = await axios.get(`${baseURL}/colecciones`);
+      const { data } = response;
+
+      setColecciones(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchColecciones();
+  }, []);
 
   return (
     <DataContext.Provider
