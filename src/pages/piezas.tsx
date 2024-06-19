@@ -33,7 +33,7 @@ export default function Piezas() {
         <span>{pieza.coleccion}</span>
       </div>
     ),
-    descripcion: pieza.descripcion,
+    descripcion: pieza.descripcion || 'Sin descripción',
     molde: pieza.molde,
     acciones: (
       <div className="flex gap-4 text-primary">

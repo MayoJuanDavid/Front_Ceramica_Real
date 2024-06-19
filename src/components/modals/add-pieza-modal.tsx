@@ -130,7 +130,7 @@ const AddPiezaModal = ({
       <div className="w-full flex flex-col px-32">
         <Input
           label="Descripción"
-          {...register('descripcion', { required: true })}
+          {...register('descripcion')}
         />
         {errors.descripcion ? (
           <span className="text-xs text-rose-600">Este campo es requerido</span>
