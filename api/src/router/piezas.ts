@@ -25,7 +25,7 @@ export default (router: express.Router): void => {
     const { id_coleccion, id_molde, descripcion, precio } = req.body;
     pool.query(
       'INSERT INTO pieza (id_coleccion, id_molde, descripcion, precio) VALUES ($1, $2, $3, $4)',
-      [id_coleccion, id_molde, descripcion, precio],
+      [id_coleccion, id_molde, descripcion, precio || undefined],
       (error) => {
         if (error) {
           console.log(error);
